@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MIcrosoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
+    <PackageReference Include="MIcrosoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="MIcrosoft.AspNetCore.Identity.UI" Version="3.1.6" />
+    <PackageReference Include="MIcrosoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="MIcrosoft.EntityFrameworkCore.Abstractions" Version="3.1.6" />
+    <PackageReference Include="MIcrosoft.EntityFrameworkCore.Relational" Version="3.1.6" />
+    <PackageReference Include="MIcrosoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.WebAPI.Core\Hydra.WebAPI.Core.csproj" />
+  </ItemGroup>
+
+
+</Project>
