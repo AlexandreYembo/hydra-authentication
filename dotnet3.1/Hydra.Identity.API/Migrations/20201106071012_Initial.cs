@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Hydra.Authentication.API.Migrations
+namespace Hydra.Identity.API.Migrations
 {
     public partial class Initial : Migration
     {

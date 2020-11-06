@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hydra.Authentication.API.Data
+namespace Hydra.Identity.API.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

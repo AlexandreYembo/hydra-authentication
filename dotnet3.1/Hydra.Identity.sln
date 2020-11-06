@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hydra.Authentication.API", "Hydra.Authentication.API\Hydra.Authentication.API.csproj", "{883CAC59-F3AD-4193-8C78-248640B9C174}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hydra.Identity.API", "Hydra.Identity.API\Hydra.Identity.API.csproj", "{883CAC59-F3AD-4193-8C78-248640B9C174}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{3ADA3250-1FFC-11EB-B0B2-7FB16445C145}"
 EndProject

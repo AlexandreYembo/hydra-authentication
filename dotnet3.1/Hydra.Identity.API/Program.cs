@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Hydra.Authentication.API
+namespace Hydra.Identity.API
 {
     public class Program
     {

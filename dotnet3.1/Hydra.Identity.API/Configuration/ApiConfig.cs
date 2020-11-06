@@ -1,4 +1,4 @@
-using Hydra.Authentication.API.Data;
+using Hydra.Identity.API.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Hydra.Authentication.API.Configuration
+namespace Hydra.Identity.API.Configuration
 {
     public static class ApiConfig
     {
