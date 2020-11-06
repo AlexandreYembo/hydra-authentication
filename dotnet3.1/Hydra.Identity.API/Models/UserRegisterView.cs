@@ -14,5 +14,7 @@ namespace Hydra.Identity.API.Models
 
         [Compare("Password", ErrorMessage="Password does not match")]
         public string PasswordConfirmation { get; set; }
+        public string IdentityNumber { get; set; }
+        public string Name { get; set; }
     }
 }

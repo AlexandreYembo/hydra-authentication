@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.WebAPI.Core\Hydra.WebAPI.Core.csproj" />
+    <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.Core.Integration\Hydra.Core.Integration.csproj" />
+    <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.Core.MessageBus\Hydra.Core.MessageBus.csproj" />
   </ItemGroup>
 
 

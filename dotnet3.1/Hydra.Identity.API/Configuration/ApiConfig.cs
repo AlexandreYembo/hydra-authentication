@@ -1,4 +1,5 @@
 using Hydra.Identity.API.Data;
+using Hydra.WebAPI.Core.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +22,8 @@ namespace Hydra.Identity.API.Configuration
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders(); //is not related to JWT, this is token when you need to reset your password this is a token that will check the link that will receive in your email.
             
+            services.AddJwtConfiguration(configuration);
+
             services.AddControllers();
             
             services.AddCors(options =>{
@@ -44,8 +47,7 @@ namespace Hydra.Identity.API.Configuration
 
             app.UseCors("Auth");
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthConfiguration();
 
             app.UseEndpoints(endpoints =>
             {
