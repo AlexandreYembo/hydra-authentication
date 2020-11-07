@@ -67,9 +67,16 @@ namespace Hydra.Identity.API.Controllers
 
             var userLogged = await _authenticationService.SignInManager.PasswordSignInAsync(userLogin.Email, userLogin.Password, false, true);
             
-            if(userLogged.Succeeded) return Ok();
+            if(userLogged.Succeeded) return CustomResponse(await _authenticationService.TokenGenerator(userLogin.Email));
 
-            return BadRequest();
+            if(userLogged.IsLockedOut)
+            {
+                AddErrors("User tempoary locked for many tries");
+                return CustomResponse();
+            }
+
+            AddErrors("Invalid User or password");
+            return CustomResponse();
         }
 
         private async Task<ResponseMessage> CreateCustomer(UserRegisterView userRegister)
