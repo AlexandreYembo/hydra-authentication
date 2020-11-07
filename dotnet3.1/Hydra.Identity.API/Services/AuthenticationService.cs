@@ -12,6 +12,7 @@ using Hydra.WebAPI.Core.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NetDevPack.Security.JwtSigningCredentials.Interfaces;
 
 namespace Hydra.Identity.API.Services
 {
@@ -21,21 +22,23 @@ namespace Hydra.Identity.API.Services
         public readonly UserManager<IdentityUser> UserManager;
         private readonly AppSettings _appSettings;
         private readonly ApplicationDbContext _context;
-
         private readonly IAspNetUser _aspNetUser;
+        private readonly IJsonWebKeySetService _jwksService;
 
         public AuthenticationService(
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
             IOptions<AppSettings> appSettings,
             ApplicationDbContext context,
-            IAspNetUser aspNetUser)
+            IAspNetUser aspNetUser,
+            IJsonWebKeySetService jwksService)
         {
             SignInManager = signInManager;
             UserManager = userManager;
             _appSettings = appSettings.Value;
             _aspNetUser = aspNetUser;
             _context = context;
+            _jwksService = jwksService;
         }
 
         public async Task<UserLoginResponse> TokenGenerator(string email)
@@ -72,15 +75,19 @@ namespace Hydra.Identity.API.Services
 
          private string EncodeToken(ClaimsIdentity identityClaims)
         {
+            //Endpoint authentication api
+            var currentIssuer = $"{ _aspNetUser.GetHttpContext().Request.Scheme}://{_aspNetUser.GetHttpContext().Request.Host}";
+
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var signingCredentials = _jwksService.GetCurrent();
+            
             var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = _appSettings.ValidIssuer,
-                Audience = _appSettings.ValidAudience,
+                Issuer = currentIssuer,
+                // Audience = _appSettings.ValidAudience, this is not used because it matters when tokens is valid
                 Subject = identityClaims,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationTime),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = signingCredentials
             });
 
             return tokenHandler.WriteToken(token);

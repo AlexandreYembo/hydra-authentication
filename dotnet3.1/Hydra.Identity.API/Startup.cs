@@ -29,6 +29,7 @@ namespace Hydra.Identity.API
         {
             services.AddApiConfiguration(Configuration);
             services.AddSwagger();
+            services.RegisterServices();
             services.AddMessageBusConfiguration(Configuration);
          
          //   services.RegisterServices();

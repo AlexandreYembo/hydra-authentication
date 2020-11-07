@@ -1,7 +1,5 @@
 using Hydra.Identity.API.Data;
-using Hydra.Identity.API.Services;
 using Hydra.WebAPI.Core.Identity;
-using Hydra.WebAPI.Core.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetDevPack.Security.JwtSigningCredentials;
+using NetDevPack.Security.JwtSigningCredentials.AspNetCore;
 
 namespace Hydra.Identity.API.Configuration
 {
@@ -16,6 +16,10 @@ namespace Hydra.Identity.API.Configuration
     {
          public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddJwksManager(options => options.Algorithm = Algorithm.ES256) //Criptography schema
+                    .PersistKeysToDatabaseStore<ApplicationDbContext>(); //Persist the key
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
@@ -24,11 +28,7 @@ namespace Hydra.Identity.API.Configuration
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders(); //is not related to JWT, this is token when you need to reset your password this is a token that will check the link that will receive in your email.
             
-            services.AddScoped<AuthenticationService>();
-            services.AddScoped<IAspNetUser, AspNetUser>();
-
-            services.AddJwtConfiguration(configuration);
-
+          
             services.AddControllers();
             
             services.AddCors(options =>{
@@ -58,6 +58,9 @@ namespace Hydra.Identity.API.Configuration
             {
                 endpoints.MapControllers();
             });
+
+            //localhost/jwks //default endpoint
+            app.UseJwksDiscovery(); // it will create an specfic endpoint to expose the key
         }
     }
 }
