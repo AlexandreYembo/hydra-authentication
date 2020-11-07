@@ -1,6 +1,4 @@
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Hydra.Core.Integration.Messages;
 using Hydra.Core.MessageBus;
@@ -50,7 +48,7 @@ namespace Hydra.Identity.API.Controllers
                    return CustomResponse(customerResult.ValidResult);
                }
 
-               return CustomResponse(_authenticationService.TokenGenerator(userRegister.Email));
+               return CustomResponse(await _authenticationService.TokenGenerator(userRegister.Email));
             }
 
             foreach (var error in userRegistered.Errors)
@@ -63,7 +61,7 @@ namespace Hydra.Identity.API.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginView userLogin)
+        public async Task<ActionResult> Login(UserLoginView userLogin)
         {
             if(!ModelState.IsValid) return BadRequest();
 
