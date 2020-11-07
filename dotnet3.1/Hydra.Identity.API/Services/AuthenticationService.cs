@@ -20,7 +20,6 @@ namespace Hydra.Identity.API.Services
     {
         public readonly SignInManager<IdentityUser> SignInManager;
         public readonly UserManager<IdentityUser> UserManager;
-        private readonly AppSettings _appSettings;
         private readonly ApplicationDbContext _context;
         private readonly IAspNetUser _aspNetUser;
         private readonly IJsonWebKeySetService _jwksService;
@@ -28,14 +27,12 @@ namespace Hydra.Identity.API.Services
         public AuthenticationService(
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            IOptions<AppSettings> appSettings,
             ApplicationDbContext context,
             IAspNetUser aspNetUser,
             IJsonWebKeySetService jwksService)
         {
             SignInManager = signInManager;
             UserManager = userManager;
-            _appSettings = appSettings.Value;
             _aspNetUser = aspNetUser;
             _context = context;
             _jwksService = jwksService;
@@ -98,7 +95,7 @@ namespace Hydra.Identity.API.Services
             return new UserLoginResponse
             {
                 AccessToken = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationTime).TotalSeconds,
+                ExpiresIn = TimeSpan.FromHours(1).TotalSeconds,
                 UserToken = new UserToken
                 {
                     Id = user.Id,
