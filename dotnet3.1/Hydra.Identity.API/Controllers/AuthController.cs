@@ -79,6 +79,27 @@ namespace Hydra.Identity.API.Controllers
             return CustomResponse();
         }
 
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+          if(string.IsNullOrEmpty(refreshToken))
+          {
+              AddErrors("Invalid refresh token");
+              return CustomResponse();
+          }
+
+          var token = await _authenticationService.GetRefreshToken(Guid.Parse(refreshToken));
+
+          if(token is null)
+          {
+              AddErrors("Refresh token is expired");
+              return CustomResponse();
+          }
+
+          return CustomResponse(await _authenticationService.TokenGenerator(token.Username));
+        }
+
+
         private async Task<ResponseMessage> CreateCustomer(UserRegisterView userRegister)
         {
             var user = await _authenticationService.UserManager.FindByEmailAsync(userRegister.Email);

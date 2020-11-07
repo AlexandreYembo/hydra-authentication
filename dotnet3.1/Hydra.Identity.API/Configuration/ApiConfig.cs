@@ -1,4 +1,5 @@
 using Hydra.Identity.API.Data;
+using Hydra.Identity.API.Extensions;
 using Hydra.WebAPI.Core.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +17,9 @@ namespace Hydra.Identity.API.Configuration
     {
          public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            var appSettingsSection = configuration.GetSection("AppTokenSettings");
+            services.Configure<AppTokenSettings>(appSettingsSection);
+
             services.AddJwksManager(options => options.Algorithm = Algorithm.ES256) //Criptography schema
                     .PersistKeysToDatabaseStore<ApplicationDbContext>(); //Persist the key
 
