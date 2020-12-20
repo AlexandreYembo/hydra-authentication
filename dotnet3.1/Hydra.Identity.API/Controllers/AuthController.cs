@@ -27,7 +27,7 @@ namespace Hydra.Identity.API.Controllers
         [HttpPost("createUser")]
         public async Task<IActionResult> Register(UserRegisterView userRegister)
         {
-            if(!ModelState.IsValid) return BadRequest();
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
 
             var user = new IdentityUser
             {
@@ -63,7 +63,7 @@ namespace Hydra.Identity.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login(UserLoginView userLogin)
         {
-            if(!ModelState.IsValid) return BadRequest();
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
 
             var userLogged = await _authenticationService.SignInManager.PasswordSignInAsync(userLogin.Email, userLogin.Password, false, true);
             

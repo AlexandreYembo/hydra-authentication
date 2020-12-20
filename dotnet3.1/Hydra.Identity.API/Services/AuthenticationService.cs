@@ -79,7 +79,8 @@ namespace Hydra.Identity.API.Services
          private string EncodeToken(ClaimsIdentity identityClaims)
         {
             //Endpoint authentication api
-            var currentIssuer = $"{ _aspNetUser.GetHttpContext().Request.Scheme}://{_aspNetUser.GetHttpContext().Request.Host}";
+            var currentIssuer = _tokenSettings.Issuer //takes from appsetting --> fixed to use the proper issue when deployed using docker.
+                                ?? $"{ _aspNetUser.GetHttpContext().Request.Scheme}://{_aspNetUser.GetHttpContext().Request.Host}";
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var signingCredentials = _jwksService.GetCurrent();
