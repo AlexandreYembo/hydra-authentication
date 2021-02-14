@@ -1,5 +1,5 @@
-using Hydra.WebAPI.Core.Setups;
-using Hydra.WebAPI.Core.Swagger;
+using Hydra.Core.API.Setups;
+using Hydra.Core.API.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 

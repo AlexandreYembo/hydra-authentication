@@ -1,6 +1,6 @@
+using Hydra.Core.API.Identity;
 using Hydra.Identity.API.Data;
 using Hydra.Identity.API.Extensions;
-using Hydra.WebAPI.Core.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

@@ -1,5 +1,5 @@
+using Hydra.Core.API.User;
 using Hydra.Identity.API.Services;
-using Hydra.WebAPI.Core.User;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hydra.Identity.API.Configuration

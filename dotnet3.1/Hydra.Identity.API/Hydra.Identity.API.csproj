@@ -2,9 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+     <Version>1.0.0</Version>
+    <Authors>Alexandre Yembo</Authors>
+    <Company>Hydra</Company>
+    <PackageDescription>This is Api for identity to create / authenticate an user!</PackageDescription>
+    <RepositoryUrl>https://github.com/AlexandreYembo/hydra-core</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hydra.Core.Api" Version="1.0.0" />
+    <PackageReference Include="Hydra.Core.Integration" Version="1.0.0" />
+    <PackageReference Include="Hydra.Core.MessageBus" Version="1.0.0" />
+    <PackageReference Include="HydraCore" Version="1.0.0" />
     <PackageReference Include="MIcrosoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="MIcrosoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="MIcrosoft.AspNetCore.Identity.UI" Version="3.1.6" />
@@ -18,12 +27,6 @@
     </PackageReference>
     <PackageReference Include="NetDevPack.Security.JwtSigningCredentials.AspNetCore" Version="1.0.3" />
     <PackageReference Include="NetDevPack.Security.JwtSigningCredentials.Store.EntityFrameworkCore" Version="1.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.WebAPI.Core\Hydra.WebAPI.Core.csproj" />
-    <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.Core.Integration\Hydra.Core.Integration.csproj" />
-    <ProjectReference Include="..\..\hydra-core\dotnet3.1\Hydra.Core.MessageBus\Hydra.Core.MessageBus.csproj" />
   </ItemGroup>
 
 
