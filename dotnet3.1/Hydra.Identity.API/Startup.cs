@@ -1,4 +1,5 @@
 using Hydra.Core.API.Setups;
+using Hydra.Core.Validator.DependencyInjection;
 using Hydra.Identity.API.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,10 +23,9 @@ namespace Hydra.Identity.API
         {
             services.AddApiConfiguration(Configuration);
             services.AddSwagger();
+            services.RegisterValidation();
             services.RegisterServices();
             services.AddMessageBusConfiguration(Configuration);
-         
-         //   services.RegisterServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,10 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Hydra.Core.API.Controllers;
-using Hydra.Core.Integration.Messages;
+using Hydra.Core.Mediator.Integration;
 using Hydra.Core.MessageBus;
 using Hydra.Identity.API.Models;
 using Hydra.Identity.API.Services;
+using Hydra.User.Integration.Messages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
