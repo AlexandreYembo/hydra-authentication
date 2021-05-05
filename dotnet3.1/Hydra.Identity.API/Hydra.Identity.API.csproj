@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hydra.Core.Api" Version="1.0.1" />
-    <PackageReference Include="Hydra.Core.MessageBus" Version="1.0.2" />
-    <PackageReference Include="Hydra.User.Integration" Version="1.0.0" />
+    <PackageReference Include="Hydra.Core.API" Version="1.0.0-beta-210505.3" />
+    <PackageReference Include="Hydra.Core.MessageBus" Version="1.0.0-beta-210505.3" />
+    <PackageReference Include="Hydra.Ecommerce.Integrations" Version="1.0.0-beta-210505.2" />
     <PackageReference Include="MIcrosoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="MIcrosoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="MIcrosoft.AspNetCore.Identity.UI" Version="3.1.6" />

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Hydra.Core.API.Controllers;
 using Hydra.Core.Mediator.Integration;
@@ -43,7 +44,8 @@ namespace Hydra.Identity.API.Controllers
             {
                var customerResult = await CreateCustomer(userRegister);
 
-               if(!customerResult.ValidResult.IsValid)
+               var errors = customerResult.ValidResult.Errors;
+               if(errors.Any())//!customerResult.ValidResult.IsValid)
                {
                    await _authenticationService.UserManager.DeleteAsync(user);
                    return CustomResponse(customerResult.ValidResult);
@@ -109,7 +111,7 @@ namespace Hydra.Identity.API.Controllers
             {
                 return await _messageBus.RequestAsync<UserSaveIntegrationEvent, ResponseMessage>(userSaved);
             }
-            catch
+            catch (Exception ex)
             {
                 await _authenticationService.UserManager.DeleteAsync(user);
                 throw;

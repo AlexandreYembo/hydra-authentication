@@ -1,5 +1,4 @@
 using Hydra.Core.API.Setups;
-using Hydra.Core.Validator.DependencyInjection;
 using Hydra.Identity.API.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +22,6 @@ namespace Hydra.Identity.API
         {
             services.AddApiConfiguration(Configuration);
             services.AddSwagger();
-            services.RegisterValidation();
             services.RegisterServices();
             services.AddMessageBusConfiguration(Configuration);
         }
