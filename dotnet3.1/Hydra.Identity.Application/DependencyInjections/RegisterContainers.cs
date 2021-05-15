@@ -4,9 +4,11 @@ using Hydra.Core.Mediator.Communication;
 using Hydra.Core.Mediator.Configuration;
 using Hydra.Core.Mediator.Messages;
 using Hydra.Identity.Application.Commands;
+using Hydra.Identity.Application.Commands.TokenRefresh;
 using Hydra.Identity.Application.Commands.UserLogin;
 using Hydra.Identity.Application.Commands.UserRegister;
 using Hydra.Identity.Application.Events;
+using Hydra.Identity.Application.Events.TokenRefresh;
 using Hydra.Identity.Application.Events.UserLogin;
 using Hydra.Identity.Application.Events.UserRegister;
 using Hydra.Identity.Application.Models;
@@ -23,6 +25,7 @@ namespace Hydra.Identity.Application.DependencyInjections
             services.AddScoped<IMediatorHandler, MediatorHandler>()
                     .RegisterContainerUserRegister()
                     .RegisterContainerUserLogin()
+                    .RegisterContainerTokenRefresh()
                     .AddMediator<TStartup>();
         }
 
@@ -42,6 +45,14 @@ namespace Hydra.Identity.Application.DependencyInjections
             services.AddScoped<IRequestHandler<UserLoginCommand, CommandResult<UserLoginResponse>>, UserLoginCommandHandler>();
 
             services.AddScoped<INotificationHandler<UserLoginFailedEvent>, UserLoginEventHandler>();
+            return services;
+         }
+
+          private static IServiceCollection RegisterContainerTokenRefresh(this IServiceCollection services)
+         {
+            services.AddScoped<IRequestHandler<TokenRefreshCommand, CommandResult<UserLoginResponse>>, TokenRefreshCommandHandler>();
+
+            services.AddScoped<INotificationHandler<TokenRefreshInvalidEvent>, TokenRefreshInvalidEventHandler>();
             return services;
          }
     }

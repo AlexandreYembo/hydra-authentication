@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using Hydra.Core.API.Controllers;
 using Hydra.Core.Mediator.Abstractions.Mediator;
 using Hydra.Identity.API.Models;
+using Hydra.Identity.Application.Commands.TokenRefresh;
 using Hydra.Identity.Application.Commands.UserLogin;
 using Hydra.Identity.Application.Commands.UserRegister;
 using Hydra.Identity.Application.Models;
@@ -46,24 +47,18 @@ namespace Hydra.Identity.API.Controllers
             return CustomResponse(result);
         }
 
-        // [HttpPost("refresh-token")]
-        // public async Task<ActionResult> RefreshToken([FromBody] string refreshToken)
-        // {
-        //   if(string.IsNullOrEmpty(refreshToken))
-        //   {
-        //       AddErrors("Invalid refresh token");
-        //       return CustomResponse();
-        //   }
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+            if(string.IsNullOrEmpty(refreshToken))
+            {
+                AddErrors("Invalid refresh token");
+                return CustomResponse();
+            }
 
-        //   var token = await _authenticationService.GetRefreshToken(Guid.Parse(refreshToken));
-
-        //   if(token is null)
-        //   {
-        //       AddErrors("Refresh token is expired");
-        //       return CustomResponse();
-        //   }
-
-        //   return CustomResponse(await _authenticationService.TokenGenerator(token.Username));
-        // }
+            var command = new TokenRefreshCommand(Guid.Parse(refreshToken));
+            var result = await _mediator.SendCommand<TokenRefreshCommand, UserLoginResponse>(command).ConfigureAwait(false);
+            return CustomResponse(result);
+        }
     }
 }
