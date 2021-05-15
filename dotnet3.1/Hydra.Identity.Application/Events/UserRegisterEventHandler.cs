@@ -1,19 +1,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Hydra.Core.Mediator.Abstractions.Mediator;
-using Hydra.Identity.Application.Commands.RegisterUser;
-using Hydra.Identity.Application.Events.RegisterUser;
+using Hydra.Identity.Application.Commands.UserRegister;
+using Hydra.Identity.Application.Events.UserRegister;
 using MediatR;
 
 namespace Hydra.Identity.Application.Events
 {
-    public class RegisterUserEventHandler :
+    public class UserRegisterEventHandler :
                     INotificationHandler<UserCanceledEvent>,
                     INotificationHandler<CustomerCreatedEvent>
     {
         private readonly IMediatorHandler _mediator;
 
-        public RegisterUserEventHandler(IMediatorHandler mediator)
+        public UserRegisterEventHandler(IMediatorHandler mediator)
         {
             _mediator = mediator;
         }

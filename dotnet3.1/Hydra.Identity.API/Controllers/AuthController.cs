@@ -4,7 +4,9 @@ using FluentValidation.Results;
 using Hydra.Core.API.Controllers;
 using Hydra.Core.Mediator.Abstractions.Mediator;
 using Hydra.Identity.API.Models;
-using Hydra.Identity.Application.Commands.RegisterUser;
+using Hydra.Identity.Application.Commands.UserLogin;
+using Hydra.Identity.Application.Commands.UserRegister;
+using Hydra.Identity.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hydra.Identity.API.Controllers
@@ -34,24 +36,15 @@ namespace Hydra.Identity.API.Controllers
         }
 
 
-        // [HttpPost("login")]
-        // public async Task<ActionResult> Login(UserLoginView userLogin)
-        // {
-        //     if(!ModelState.IsValid) return CustomResponse(ModelState);
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(UserLoginView userLogin)
+        {
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
 
-        //     var userLogged = await _authenticationService.SignInManager.PasswordSignInAsync(userLogin.Email, userLogin.Password, false, true);
-            
-        //     if(userLogged.Succeeded) return CustomResponse(await _authenticationService.TokenGenerator(userLogin.Email));
-
-        //     if(userLogged.IsLockedOut)
-        //     {
-        //         AddErrors("User tempoary locked for many tries");
-        //         return CustomResponse();
-        //     }
-
-        //     AddErrors("Invalid User or password");
-        //     return CustomResponse();
-        // }
+            var command = new UserLoginCommand(userLogin.Email, userLogin.Password);
+            var result = await _mediator.SendCommand<UserLoginCommand, UserLoginResponse>(command).ConfigureAwait(false);
+            return CustomResponse(result);
+        }
 
         // [HttpPost("refresh-token")]
         // public async Task<ActionResult> RefreshToken([FromBody] string refreshToken)

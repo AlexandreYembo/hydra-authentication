@@ -1,7 +1,7 @@
 using FluentValidation.Results;
 using Hydra.Core.Mediator.Messages;
 
-namespace Hydra.Identity.Application.Commands.RegisterUser
+namespace Hydra.Identity.Application.Commands.UserRegister
 {
     public class CreateNewUserCommand: Command<ValidationResult>
     {

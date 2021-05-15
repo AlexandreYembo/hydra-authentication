@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Hydra.Identity.Application.Exceptions;
 using Hydra.Identity.Application.Models;
 using Hydra.Identity.Application.Providers;
 using Hydra.Identity.Infrastructure.Data;
@@ -17,29 +18,46 @@ namespace Hydra.Identity.Infrastructure.Providers
     public class UserLoginProvider : IUserLoginProvider
     {
         private readonly UserManager<IdentityUser> _userManager;
+         public readonly SignInManager<IdentityUser> _signInManager;
         private readonly ApplicationDbContext _context;
         private readonly IJsonWebKeySetService _jwksService;
 
         public UserLoginProvider(UserManager<IdentityUser> userManager,
-                                 ApplicationDbContext context,
-                                 IJsonWebKeySetService jwksService)
+                                SignInManager<IdentityUser> signInManager,
+                                ApplicationDbContext context,
+                                IJsonWebKeySetService jwksService)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _context = context;
             _jwksService = jwksService;
+        }
+
+        public async Task<SignInResult> UserSignInAsync(string email, string password)
+        {
+            var userLogged = await _signInManager.PasswordSignInAsync(email, password, false, true).ConfigureAwait(false);
+            return userLogged;
         }
         
         public async Task<UserLoginResponse> TokenGenerator(string email, string issuer, double refreshTokenExpiration)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            var claims = await _userManager.GetClaimsAsync(user);
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                var claims = await _userManager.GetClaimsAsync(user);
 
-            var identityClaims = await GetUserClaims(claims, user);
-            var encodedToken = EncodeToken(identityClaims, issuer);
-            
-            var refreshToken = await RefreshToken(email, refreshTokenExpiration);
+                var identityClaims = await GetUserClaims(claims, user);
+                var encodedToken = EncodeToken(identityClaims, issuer);
+                
+                var refreshToken = await RefreshToken(email, refreshTokenExpiration);
 
-            return GetTokenResponse(encodedToken, user, claims, refreshToken);
+                return GetTokenResponse(encodedToken, user, claims, refreshToken);
+            }
+            catch (Exception ex)
+            {
+                throw new UserTokenException(ex.Message);
+            }
+          
         }
 
         public async Task<RefreshToken> GetRefreshToken(Guid refreshToken)

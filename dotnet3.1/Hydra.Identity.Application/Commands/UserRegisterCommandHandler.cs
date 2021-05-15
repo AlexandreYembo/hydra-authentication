@@ -7,8 +7,8 @@ using Hydra.Core.Mediator.Abstractions.Mediator;
 using Hydra.Core.Mediator.Integration;
 using Hydra.Core.Mediator.Messages;
 using Hydra.Core.MessageBus;
-using Hydra.Identity.Application.Commands.RegisterUser;
-using Hydra.Identity.Application.Events.RegisterUser;
+using Hydra.Identity.Application.Commands.UserRegister;
+using Hydra.Identity.Application.Events.UserRegister;
 using Hydra.Identity.Application.Providers;
 using Hydra.User.Integration.Messages;
 using MediatR;
@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Hydra.Identity.Application.Commands
 {
-    public class RegisterUserCommandHandler : CommandHandler,
+    public class UserRegisterCommandHandler : CommandHandler,
                                        IRequestHandler<CreateNewUserCommand, CommandResult<ValidationResult>>,
                                        IRequestHandler<NotifyNewUserCommand, bool>,
                                        IRequestHandler<DeleteUserCommand, bool>
@@ -25,7 +25,7 @@ namespace Hydra.Identity.Application.Commands
         private readonly IMediatorHandler _mediator;
         private readonly IUserRegisterProvider _userRegisterProvider;
 
-        public RegisterUserCommandHandler(
+        public UserRegisterCommandHandler(
                               IUserRegisterProvider userRegisterProvider,
                               IMediatorHandler mediator,
                               IMessageBus messageBus)

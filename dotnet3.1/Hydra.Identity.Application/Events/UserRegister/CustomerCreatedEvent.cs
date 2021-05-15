@@ -1,11 +1,11 @@
 using System;
 using Hydra.Core.Mediator.Messages;
 
-namespace Hydra.Identity.Application.Commands.RegisterUser
+namespace Hydra.Identity.Application.Events.UserRegister
 {
-    public class NotifyNewUserCommand : Command
+    public class CustomerCreatedEvent : Event
     {
-     public NotifyNewUserCommand(Guid id, string name, string email)
+        public CustomerCreatedEvent(Guid id, string name, string email)
         {
             AggregateId = id;
             Name = name;

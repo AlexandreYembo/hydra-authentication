@@ -2,7 +2,7 @@ using System;
 using FluentValidation.Results;
 using Hydra.Core.Mediator.Messages;
 
-namespace Hydra.Identity.Application.Events.RegisterUser
+namespace Hydra.Identity.Application.Events.UserRegister
 {
     public class UserCanceledEvent : Event
     {
