@@ -1,10 +1,10 @@
-using Hydra.Identity.API.Models;
+using Hydra.Identity.Application.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NetDevPack.Security.JwtSigningCredentials;
 using NetDevPack.Security.JwtSigningCredentials.Store.EntityFrameworkCore;
 
-namespace Hydra.Identity.API.Data
+namespace Hydra.Identity.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext, ISecurityKeyContext
     {

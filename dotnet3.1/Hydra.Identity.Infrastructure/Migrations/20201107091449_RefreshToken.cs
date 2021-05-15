@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Hydra.Identity.API.Migrations
+namespace Hydra.Identity.Infrastructure.Migrations
 {
     public partial class RefreshToken : Migration
     {

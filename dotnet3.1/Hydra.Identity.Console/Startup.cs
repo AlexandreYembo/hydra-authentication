@@ -1,15 +1,18 @@
 using Hydra.Core.API.User;
 using Hydra.Identity.Application.DependencyInjections;
 using Hydra.Identity.Infrastructure.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Hydra.Identity.API.Configuration
+namespace Hydra.Identity.Console
 {
-    public static class DependencyInjection
+    public class Startup
     {
-        public static void RegisterServices(this IServiceCollection services)
+        public static IConfigurationRoot configuration;
+
+        public static void Main(IServiceCollection services)
         {
-            services.RegisterIdentityInfrastructure();
+           services.RegisterIdentityInfrastructure();
             services.AddScoped<IAspNetUser, AspNetUser>();
             services.RegisterDomain<Startup>();
         }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Hydra.Identity.API.Models
+namespace Hydra.Identity.Application.Models
 {
     public class UserToken
     {

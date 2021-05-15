@@ -10,22 +10,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hydra.Core.API" Version="1.0.0-beta-210505.3" />
-    <PackageReference Include="Hydra.Core.MessageBus" Version="1.0.0-beta-210505.3" />
-    <PackageReference Include="Hydra.Ecommerce.Integrations" Version="1.0.0-beta-210505.2" />
-    <PackageReference Include="MIcrosoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
-    <PackageReference Include="MIcrosoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
-    <PackageReference Include="MIcrosoft.AspNetCore.Identity.UI" Version="3.1.6" />
-    <PackageReference Include="MIcrosoft.EntityFrameworkCore" Version="3.1.6" />
-    <PackageReference Include="MIcrosoft.EntityFrameworkCore.Abstractions" Version="3.1.6" />
-    <PackageReference Include="MIcrosoft.EntityFrameworkCore.Relational" Version="3.1.6" />
-    <PackageReference Include="MIcrosoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+    <PackageReference Include="Hydra.Core.API" Version="1.0.0-beta-210512.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NetDevPack.Security.JwtSigningCredentials.AspNetCore" Version="1.0.3" />
     <PackageReference Include="NetDevPack.Security.JwtSigningCredentials.Store.EntityFrameworkCore" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hydra.Identity.Application\Hydra.Identity.Application.csproj" />
+    <ProjectReference Include="..\Hydra.Identity.Infrastructure\Hydra.Identity.Infrastructure.csproj" />
   </ItemGroup>
 
 

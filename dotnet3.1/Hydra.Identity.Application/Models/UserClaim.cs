@@ -1,4 +1,4 @@
-namespace Hydra.Identity.API.Models
+namespace Hydra.Identity.Application.Models
 {
     public class UserClaim
     {

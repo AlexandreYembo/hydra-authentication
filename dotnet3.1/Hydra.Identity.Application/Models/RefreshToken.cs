@@ -1,6 +1,6 @@
 using System;
 
-namespace Hydra.Identity.API.Models {
+namespace Hydra.Identity.Application.Models {
     public class RefreshToken {
         public RefreshToken () {
             this.Id = Guid.NewGuid();
