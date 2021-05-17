@@ -33,7 +33,7 @@ namespace Hydra.Identity.API.Controllers
 
             var result = await _mediator.SendCommand<CreateNewUserCommand, ValidationResult>(command).ConfigureAwait(false);
 
-            return CustomResponse(result);
+            return CustomResponse(result.ValidationResult);
         }
 
 
