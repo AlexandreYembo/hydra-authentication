@@ -3,7 +3,7 @@ using System.Linq;
 using Hydra.Core.API.Tests;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hydra.Identity.API.UnitTests.Mappnig
+namespace Hydra.Identity.API.UnitTests.Mapping
 {
      public class BadRequestObjectResultMap : IRequestResultAssertion
      {

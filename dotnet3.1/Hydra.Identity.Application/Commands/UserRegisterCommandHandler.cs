@@ -37,6 +37,8 @@ namespace Hydra.Identity.Application.Commands
 
         public async Task<CommandResult<ValidationResult>> Handle(CreateNewUserCommand message, CancellationToken cancellationToken)
         {
+          if(!message.IsValid()) return new CommandResult<ValidationResult>(message.ValidationResult);
+
           var user = new IdentityUser
           {
             UserName = message.Email,

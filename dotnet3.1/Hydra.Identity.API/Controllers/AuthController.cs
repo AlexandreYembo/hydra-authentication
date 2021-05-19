@@ -15,9 +15,7 @@ namespace Hydra.Identity.API.Controllers
     [Route("api/identity")]
     public class AuthController : MainController
     {
-        // private readonly IMessageBus _messageBus;
         private readonly IMediatorHandler _mediator;
-
 
         public AuthController(IMediatorHandler mediator)
         {
@@ -27,8 +25,6 @@ namespace Hydra.Identity.API.Controllers
         [HttpPost("createUser")]
         public async Task<IActionResult> Register(UserRegisterView userRegister)
         {
-            if(!ModelState.IsValid) return CustomResponse(ModelState);
-
             var command = new CreateNewUserCommand(userRegister.IdentityNumber, userRegister.Name, userRegister.Email, userRegister.Email, userRegister.Password);
 
             var result = await _mediator.SendCommand<CreateNewUserCommand, ValidationResult>(command).ConfigureAwait(false);

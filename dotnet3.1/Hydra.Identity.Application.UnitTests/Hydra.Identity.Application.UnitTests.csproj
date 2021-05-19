@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
@@ -23,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hydra.Identity.API\Hydra.Identity.API.csproj" />
+    <ProjectReference Include="..\Hydra.Identity.Application\Hydra.Identity.Application.csproj" />
   </ItemGroup>
-
 </Project>

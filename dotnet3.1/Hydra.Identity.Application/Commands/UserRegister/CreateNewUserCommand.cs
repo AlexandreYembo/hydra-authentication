@@ -1,5 +1,6 @@
 using FluentValidation.Results;
 using Hydra.Core.Mediator.Messages;
+using Hydra.Identity.Application.Validators;
 
 namespace Hydra.Identity.Application.Commands.UserRegister
 {
@@ -20,5 +21,11 @@ namespace Hydra.Identity.Application.Commands.UserRegister
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        public override bool IsValid()
+        {
+            ValidationResult = new CreateNewUserCommandValidator().Validate(this);
+            return ValidationResult.IsValid;
+        }
     }
 }
