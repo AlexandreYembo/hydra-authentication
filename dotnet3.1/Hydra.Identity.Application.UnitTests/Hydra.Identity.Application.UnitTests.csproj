@@ -8,8 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Hydra.Core.API.Tests" Version="1.0.0-beta-210517.2" />
     <PackageReference Include="Hydra.Core.Mediator" Version="1.1.0" />
+    <PackageReference Include="Hydra.Core.Tests" Version="1.0.0-beta-210526" />
+    <PackageReference Include="Hydra.Core.Tests.Fixtures" Version="1.0.0-beta-210517.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="moq" Version="4.16.1" />
     <PackageReference Include="xunit" Version="2.4.1" />

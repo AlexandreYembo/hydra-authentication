@@ -16,7 +16,6 @@ namespace Hydra.Identity.Application.Commands
     {
         private readonly IUserLoginProvider _userLoginProvider;
         private readonly IMediatorHandler _mediatorHandler;
-
         private readonly IUserProvider _userProvider;
 
         public UserLoginCommandHandler(IUserLoginProvider userLoginProvider,

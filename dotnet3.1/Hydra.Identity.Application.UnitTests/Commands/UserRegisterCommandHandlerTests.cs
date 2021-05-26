@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using Xunit;
 
-namespace Hydra.Identity.Application.UnitTests
+namespace Hydra.Identity.Application.UnitTests.Commands
 {
     public class UserRegisterCommandHandlerTests
     {
@@ -58,7 +58,6 @@ namespace Hydra.Identity.Application.UnitTests
             response.ValidationResult.Errors.Should().HaveCount(7);
             response.ValidationResult.Errors.Select(s => s.ErrorCode).Should().Contain(expectedResult.Errors.Select(s => s.ErrorCode));
             response.ValidationResult.Errors.Select(s => s.ErrorMessage).Should().Contain(expectedResult.Errors.Select(s => s.ErrorMessage));
-           
         }
 
 

@@ -16,7 +16,7 @@ namespace Hydra.Identity.Application.Commands.UserLogin
         public string Email { get; set; }
         public string Password { get; set; }
 
-         public override bool IsValid()
+        public override bool IsValid()
         {
             ValidationResult = new UserLoginCommandValidator().Validate(this);
             return ValidationResult.IsValid;
