@@ -29,18 +29,16 @@ namespace Hydra.Identity.API.Controllers
 
             var result = await _mediator.SendCommand<CreateNewUserCommand, ValidationResult>(command).ConfigureAwait(false);
 
-            return CustomResponse(result.ValidationResult);
+            return CustomResponse<ValidationResult>(result);
         }
 
 
         [HttpPost("login")]
         public async Task<ActionResult> Login(UserLoginView userLogin)
         {
-            if(!ModelState.IsValid) return CustomResponse(ModelState);
-
             var command = new UserLoginCommand(userLogin.Email, userLogin.Password);
             var result = await _mediator.SendCommand<UserLoginCommand, UserLoginResponse>(command).ConfigureAwait(false);
-            return CustomResponse(result);
+            return CustomResponse<UserLoginResponse>(result);
         }
 
         [HttpPost("refresh-token")]

@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 using FluentAssertions;
+using Hydra.Identity.Application.Commands.UserLogin;
+using Hydra.Identity.Application.Models;
 
 namespace Hydra.Identity.API.UnitTests.Controllers
 {
@@ -30,7 +32,7 @@ namespace Hydra.Identity.API.UnitTests.Controllers
            _commandHandler = new Mock<UserRegisterCommandHandler>();
         }
        
-        [Theory(DisplayName="Register User should fail when the model is Email is null")]
+        [Theory(DisplayName="Register User should Register")]
         [Trait("Register", "Register User")]
         [AutoMoqData]
         public async Task RegisterUser_AddNewUser_ValidRequest(AutoMoqDataValidFixtures fixtures, CommandResult<ValidationResult> result)
@@ -55,7 +57,7 @@ namespace Hydra.Identity.API.UnitTests.Controllers
             statusCode.Should().Be(200);
         }
 
-        [Theory(DisplayName="Register User should fail when the model is Email is null")]
+        [Theory(DisplayName="Register User should fail when the request is invalid")]
         [Trait("Register", "Register User")]
         [AutoMoqData]
         public async Task RegisterUser_AddNewUser_InvalidRequest(AutoMoqDataValidFixtures fixtures, CommandResult<ValidationResult> result)
@@ -77,6 +79,60 @@ namespace Hydra.Identity.API.UnitTests.Controllers
             
             //Act
             var response = await _sut.Register(request);
+
+            //Assert
+            var responseAssert = new BadRequestObjectResultMap(response);
+
+            var expectedErrors = new List<string>{
+                "Invalid request"
+            };
+
+            responseAssert.IsInvalidRequest(expectedErrors);
+        }
+
+
+        [Theory(DisplayName="Login user should return success")]
+        [Trait("Login", "Login User")]
+        [AutoMoqData]
+        public async Task LoginUser_ShouldLogingTheUser(AutoMoqDataValidFixtures fixtures, CommandResult<UserLoginResponse> commandResultExpected)
+        {
+            //Arrange
+            var request = new UserLoginView();
+            request.Email = "test@test.com";
+            request.Password = "Qwe!@£123";
+
+            _mediatorHandler.Setup(s => s.SendCommand<UserLoginCommand, UserLoginResponse>(It.IsAny<UserLoginCommand>())).ReturnsAsync(commandResultExpected);
+            
+            _sut = new AuthController(_mediatorHandler.Object);
+            
+            //Act
+            var response = await _sut.Login(request);
+            var result = new CommandResultObjectMap<UserLoginResponse>(response);
+            //Assert
+            result.ErrorCode.Should().Be(200);
+            result.CommandResult.Should().NotBeNull();
+            result.CommandResult.Should().BeEquivalentTo(commandResultExpected.Payload);
+        }
+
+        [Theory(DisplayName="Login user should return fail")]
+        [Trait("Login", "Login User")]
+        [AutoMoqData]
+        public async Task LoginUser_ShouldRetunLoginFail(AutoMoqDataValidFixtures fixtures, CommandResult<UserLoginResponse> result)
+        {
+            //Arrange
+            var request = new UserLoginView();
+            request.Email = "test@test.com";
+            request.Password = "Qwe!@£123";
+
+            result.Payload = new UserLoginResponse();
+            result.ValidationResult.Errors.Add(new ValidationFailure(string.Empty, "Invalid request"));
+
+            _mediatorHandler.Setup(s => s.SendCommand<UserLoginCommand, UserLoginResponse>(It.IsAny<UserLoginCommand>())).ReturnsAsync(result);
+            
+            _sut = new AuthController(_mediatorHandler.Object);
+            
+            //Act
+            var response = await _sut.Login(request);
 
             //Assert
             var responseAssert = new BadRequestObjectResultMap(response);

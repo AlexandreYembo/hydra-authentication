@@ -1,3 +1,4 @@
+using System;
 using FluentValidation.Results;
 using Hydra.Core.Mediator.Messages;
 using Microsoft.AspNetCore.Identity;
@@ -9,8 +10,9 @@ namespace Hydra.Identity.Application.Events.UserLogin
         public string UserName { get; set; }
         public ValidationResult ValidationResult { get; set; }
 
-          public UserLoginFailedEvent(string userName, string message)
+        public UserLoginFailedEvent(string userName, string message)
         {
+            AggregateId = Guid.NewGuid();
             UserName = userName;
             ValidationResult = new ValidationResult();
             ValidationResult.Errors.Add(new ValidationFailure(string.Empty, message));
@@ -18,6 +20,7 @@ namespace Hydra.Identity.Application.Events.UserLogin
 
         public UserLoginFailedEvent(string userName, SignInResult result)
         {
+            AggregateId = Guid.NewGuid();
             UserName = userName;
             var error = "User or password invalid!";
 

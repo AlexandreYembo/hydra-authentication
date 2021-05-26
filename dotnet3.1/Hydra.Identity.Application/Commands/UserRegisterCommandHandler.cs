@@ -89,7 +89,7 @@ namespace Hydra.Identity.Application.Commands
 
                 if(!result.IsValid())
                 {
-                    var @event = new UserCanceledEvent(message.IdentityNumber, message.Name, message.Email);
+                    var @event = new UserCanceledEvent(Guid.Parse(user.Id), message.IdentityNumber, message.Name, message.Email);
                     @event.ValidationResult = result.ValidResult;
                     await _mediator.PublishEvent(@event);
                     return result;
@@ -99,7 +99,7 @@ namespace Hydra.Identity.Application.Commands
             }
             catch (Exception ex)
             {
-                var @event = new UserCanceledEvent(message.IdentityNumber, message.Name, message.Email);
+                var @event = new UserCanceledEvent(Guid.Parse(user.Id), message.IdentityNumber, message.Name, message.Email);
                 @event.ValidationResult.Errors.Add(new FluentValidation.Results.ValidationFailure(string.Empty, ex.Message));
                 await _mediator.PublishEvent(@event).ConfigureAwait(false);
 

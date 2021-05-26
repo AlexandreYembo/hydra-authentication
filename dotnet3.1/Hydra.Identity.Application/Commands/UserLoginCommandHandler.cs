@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation.Results;
 using Hydra.Core.Mediator.Abstractions.Mediator;
 using Hydra.Core.Mediator.Messages;
 using Hydra.Identity.Application.Commands.UserLogin;
@@ -30,25 +29,26 @@ namespace Hydra.Identity.Application.Commands
         }
 
 
-        public async Task<CommandResult<UserLoginResponse>> Handle(UserLoginCommand command, CancellationToken cancellationToken)
+        public async Task<CommandResult<UserLoginResponse>> Handle(UserLoginCommand message, CancellationToken cancellationToken)
         {
-            var userLogged = await _userLoginProvider.UserSignInAsync(command.Email, command.Password);
-
+          if(!message.IsValid()) return new CommandResult<UserLoginResponse>(message.ValidationResult);
+           
+            var userLogged = await _userLoginProvider.UserSignInAsync(message.Email, message.Password);
             if(!userLogged.Succeeded)
             {
-                var @event = new UserLoginFailedEvent(command.Email, userLogged);
+                var @event = new UserLoginFailedEvent(message.Email, userLogged);
                 await _mediatorHandler.PublishEvent(@event).ConfigureAwait(false);
                 return new CommandResult<UserLoginResponse>(@event.ValidationResult);
             }
 
             try
             {
-                var jsonToken = await _userLoginProvider.TokenGenerator(command.Email, _userProvider.Issuer, _userProvider.RefreshTokenExpiration).ConfigureAwait(false);
+                var jsonToken = await _userLoginProvider.TokenGenerator(message.Email, _userProvider.Issuer, _userProvider.RefreshTokenExpiration).ConfigureAwait(false);
                 return new CommandResult<UserLoginResponse>(jsonToken);
             }
             catch (UserTokenException ute)
             {
-                var @event = new UserLoginFailedEvent(command.Email, ute.Message);
+                var @event = new UserLoginFailedEvent(message.Email, ute.Message);
                 await _mediatorHandler.PublishEvent(@event).ConfigureAwait(false);
                 return new CommandResult<UserLoginResponse>(@event.ValidationResult);
             }
