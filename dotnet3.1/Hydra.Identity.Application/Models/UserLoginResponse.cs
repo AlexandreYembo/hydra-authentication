@@ -12,12 +12,11 @@ namespace Hydra.Identity.Application.Models
         public double ExpiresIn { get; set; }
         public UserToken UserToken { get; set; }
 
-        private ValidationResult ValidationResult {get; set;}
+        private ValidationResult ValidationResult {get; set;} = new ValidationResult();
 
         public UserLoginResponse() { }
         public UserLoginResponse(string message)
         {
-            ValidationResult = new ValidationResult();
             ValidationResult.Errors.Add(new ValidationFailure(string.Empty, message));
         }
 

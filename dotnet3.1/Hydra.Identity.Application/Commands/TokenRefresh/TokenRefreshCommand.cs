@@ -1,5 +1,4 @@
 using System;
-using FluentValidation.Results;
 using Hydra.Core.Mediator.Messages;
 using Hydra.Identity.Application.Models;
 

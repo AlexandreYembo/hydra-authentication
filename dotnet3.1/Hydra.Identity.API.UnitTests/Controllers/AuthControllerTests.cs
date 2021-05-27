@@ -10,13 +10,14 @@ using Hydra.Identity.API.UnitTests.Mapping;
 using Hydra.Identity.Application.Commands;
 using Hydra.Identity.Application.Commands.UserRegister;
 using Hydra.Tests.Fixtures;
-using Hydra.Tests.Fixtures.Builders.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 using FluentAssertions;
 using Hydra.Identity.Application.Commands.UserLogin;
 using Hydra.Identity.Application.Models;
+using Hydra.Identity.Application.Commands.TokenRefresh;
+using System;
 
 namespace Hydra.Identity.API.UnitTests.Controllers
 {
@@ -35,7 +36,7 @@ namespace Hydra.Identity.API.UnitTests.Controllers
         [Theory(DisplayName="Register User should Register")]
         [Trait("Register", "Register User")]
         [AutoMoqData]
-        public async Task RegisterUser_AddNewUser_ValidRequest(AutoMoqDataValidFixtures fixtures, CommandResult<ValidationResult> result)
+        public async Task RegisterUser_AddNewUser_ValidRequest(CommandResult<ValidationResult> result)
         {
             //Arrange
             var request = new UserRegisterView();
@@ -60,7 +61,7 @@ namespace Hydra.Identity.API.UnitTests.Controllers
         [Theory(DisplayName="Register User should fail when the request is invalid")]
         [Trait("Register", "Register User")]
         [AutoMoqData]
-        public async Task RegisterUser_AddNewUser_InvalidRequest(AutoMoqDataValidFixtures fixtures, CommandResult<ValidationResult> result)
+        public async Task RegisterUser_AddNewUser_InvalidRequest(CommandResult<ValidationResult> result)
         {
             //Arrange
             var request = new UserRegisterView();
@@ -94,7 +95,7 @@ namespace Hydra.Identity.API.UnitTests.Controllers
         [Theory(DisplayName="Login user should return success")]
         [Trait("Login", "Login User")]
         [AutoMoqData]
-        public async Task LoginUser_ShouldLogingTheUser(AutoMoqDataValidFixtures fixtures, CommandResult<UserLoginResponse> commandResultExpected)
+        public async Task LoginUser_ShouldLogingTheUser(CommandResult<UserLoginResponse> commandResultExpected)
         {
             //Arrange
             var request = new UserLoginView();
@@ -114,10 +115,10 @@ namespace Hydra.Identity.API.UnitTests.Controllers
             result.CommandResult.Should().BeEquivalentTo(commandResultExpected.Payload);
         }
 
-        [Theory(DisplayName="Login user should return fail")]
+        [Theory(DisplayName="Login user should fail")]
         [Trait("Login", "Login User")]
         [AutoMoqData]
-        public async Task LoginUser_ShouldRetunLoginFail(AutoMoqDataValidFixtures fixtures, CommandResult<UserLoginResponse> result)
+        public async Task LoginUser_ShouldRetunLoginFail(CommandResult<UserLoginResponse> result)
         {
             //Arrange
             var request = new UserLoginView();
@@ -139,6 +140,48 @@ namespace Hydra.Identity.API.UnitTests.Controllers
 
             var expectedErrors = new List<string>{
                 "Invalid request"
+            };
+
+            responseAssert.IsInvalidRequest(expectedErrors);
+        }
+
+        [Theory(DisplayName="Refresh user token should success")]
+        [Trait("RefreshToken", "Refresh User Token")]
+        [AutoMoqData]
+        public async Task LoginUser_ShouldRRefreshUserToken(CommandResult<UserLoginResponse> commandResultExpected)
+        {
+            //Arrange
+            _mediatorHandler.Setup(s => s.SendCommand<TokenRefreshCommand, UserLoginResponse>(It.IsAny<TokenRefreshCommand>())).ReturnsAsync(commandResultExpected);
+            
+            _sut = new AuthController(_mediatorHandler.Object);
+
+            var refreshToken= Guid.NewGuid().ToString();
+            
+            //Act
+            var response = await _sut.RefreshToken(refreshToken);
+            var result = new CommandResultObjectMap<UserLoginResponse>(response);
+            
+            //Assert
+            result.ErrorCode.Should().Be(200);
+            result.CommandResult.Should().NotBeNull();
+            result.CommandResult.Should().BeEquivalentTo(commandResultExpected.Payload);
+        }
+
+        [Fact(DisplayName="Refresh user token should fail")]
+        [Trait("RefreshToken", "Refresh User Token")]
+        public async Task LoginUser_ShouldNotRefreshUserToken()
+        {
+            //Arrange
+            _sut = new AuthController(_mediatorHandler.Object);
+            
+            //Act
+            var response = await _sut.RefreshToken(null);
+
+            //Assert
+            var responseAssert = new BadRequestObjectResultMap(response);
+
+            var expectedErrors = new List<string>{
+                "Invalid refresh token"
             };
 
             responseAssert.IsInvalidRequest(expectedErrors);
