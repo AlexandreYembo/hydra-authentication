@@ -10,15 +10,17 @@ Workflow for Signup:
 ### Hydra.Identity.API
 
 Implements the interface to perform actions available so far:
-- Register a new user
+1. Register a new user
 
-- Allow to login an user and get the token
+2. Allow to login an user and get the token
 
-- Allow to refresh a token by providing the token Guid.
+3. Allow to refresh a token by providing the token Guid.
+
+4. Dispatch a command to the application to process the logic and expect a CommandResult (with success or failed scenario).
 
 #### Hydra.Identity.Application
 
-Implement the CQRS design architecture
+Contains commands and event and Business logic.
 
 1. Commands and Commands Handlers (change the entity status on database)
 
