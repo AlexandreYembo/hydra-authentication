@@ -1,13 +1,13 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 using Hydra.Core.API.Controllers;
-using Hydra.Core.Mediator.Integration;
-using Hydra.Core.MessageBus;
+using Hydra.Core.Mediator.Abstractions.Mediator;
 using Hydra.Identity.API.Models;
-using Hydra.Identity.API.Services;
-using Hydra.User.Integration.Messages;
-using Microsoft.AspNetCore.Identity;
+using Hydra.Identity.Application.Commands.TokenRefresh;
+using Hydra.Identity.Application.Commands.UserLogin;
+using Hydra.Identity.Application.Commands.UserRegister;
+using Hydra.Identity.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hydra.Identity.API.Controllers
@@ -15,107 +15,44 @@ namespace Hydra.Identity.API.Controllers
     [Route("api/identity")]
     public class AuthController : MainController
     {
-        private readonly AuthenticationService _authenticationService;
-        private readonly IMessageBus _messageBus;
+        private readonly IMediatorHandler _mediator;
 
-
-        public AuthController(   AuthenticationService authenticationService,
-            IMessageBus messageBus)
+        public AuthController(IMediatorHandler mediator)
         {
-            _authenticationService = authenticationService;
-            _messageBus = messageBus;
+            _mediator = mediator;
         }
 
         [HttpPost("createUser")]
         public async Task<IActionResult> Register(UserRegisterView userRegister)
         {
-            if(!ModelState.IsValid) return CustomResponse(ModelState);
+            var command = new CreateNewUserCommand(userRegister.IdentityNumber, userRegister.Name, userRegister.Email, userRegister.Email, userRegister.Password);
 
-            var user = new IdentityUser
-            {
-                UserName = userRegister.Email,
-                Email = userRegister.Email,
-                EmailConfirmed = false // Will send email to confirm the account
-            };
+            var result = await _mediator.SendCommand<CreateNewUserCommand, ValidationResult>(command).ConfigureAwait(false);
 
-            var userRegistered = await _authenticationService.UserManager.CreateAsync(user, userRegister.Password);
-
-            if(userRegistered.Succeeded)
-            {
-               var customerResult = await CreateCustomer(userRegister);
-
-               var errors = customerResult.ValidResult.Errors;
-               if(errors.Any())//!customerResult.ValidResult.IsValid)
-               {
-                   await _authenticationService.UserManager.DeleteAsync(user);
-                   return CustomResponse(customerResult.ValidResult);
-               }
-
-               return CustomResponse(await _authenticationService.TokenGenerator(userRegister.Email));
-            }
-
-            foreach (var error in userRegistered.Errors)
-            {
-                AddErrors(error.Description);
-            }
-
-            return CustomResponse();
+            return CustomResponse<ValidationResult>(result);
         }
 
 
         [HttpPost("login")]
         public async Task<ActionResult> Login(UserLoginView userLogin)
         {
-            if(!ModelState.IsValid) return CustomResponse(ModelState);
-
-            var userLogged = await _authenticationService.SignInManager.PasswordSignInAsync(userLogin.Email, userLogin.Password, false, true);
-            
-            if(userLogged.Succeeded) return CustomResponse(await _authenticationService.TokenGenerator(userLogin.Email));
-
-            if(userLogged.IsLockedOut)
-            {
-                AddErrors("User tempoary locked for many tries");
-                return CustomResponse();
-            }
-
-            AddErrors("Invalid User or password");
-            return CustomResponse();
+            var command = new UserLoginCommand(userLogin.Email, userLogin.Password);
+            var result = await _mediator.SendCommand<UserLoginCommand, UserLoginResponse>(command).ConfigureAwait(false);
+            return CustomResponse<UserLoginResponse>(result);
         }
 
         [HttpPost("refresh-token")]
         public async Task<ActionResult> RefreshToken([FromBody] string refreshToken)
         {
-          if(string.IsNullOrEmpty(refreshToken))
-          {
-              AddErrors("Invalid refresh token");
-              return CustomResponse();
-          }
-
-          var token = await _authenticationService.GetRefreshToken(Guid.Parse(refreshToken));
-
-          if(token is null)
-          {
-              AddErrors("Refresh token is expired");
-              return CustomResponse();
-          }
-
-          return CustomResponse(await _authenticationService.TokenGenerator(token.Username));
-        }
-
-
-        private async Task<ResponseMessage> CreateCustomer(UserRegisterView userRegister)
-        {
-            var user = await _authenticationService.UserManager.FindByEmailAsync(userRegister.Email);
-            var userSaved =  new UserSaveIntegrationEvent(Guid.Parse(user.Id), userRegister.Name, user.Email, userRegister.IdentityNumber);
-            try
+            if(string.IsNullOrEmpty(refreshToken))
             {
-                return await _messageBus.RequestAsync<UserSaveIntegrationEvent, ResponseMessage>(userSaved);
+                AddErrors("Invalid refresh token");
+                return CustomResponse();
             }
-            catch (Exception ex)
-            {
-                await _authenticationService.UserManager.DeleteAsync(user);
-                throw;
-            }
+
+            var command = new TokenRefreshCommand(Guid.Parse(refreshToken));
+            var result = await _mediator.SendCommand<TokenRefreshCommand, UserLoginResponse>(command).ConfigureAwait(false);
+            return CustomResponse(result);
         }
     }
 }
