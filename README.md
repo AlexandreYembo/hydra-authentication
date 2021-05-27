@@ -7,7 +7,7 @@ Workflow for Signup:
 
 ### Architecture
 
-#### Hydra.Customers.Application
+#### Hydra.Identity.Application
 
 Implement the CQRS design architecture
 
@@ -15,9 +15,8 @@ Implement the CQRS design architecture
 
 2. Events and Event Handlers (represent the action that happened)
 
-3. Queries (use to read the data from database readonly)
 
-#### Hydra.Customers.Infrastructure
+#### Hydra.Ideniry.Infrastructure
 
 1. EF context
 
@@ -28,11 +27,3 @@ Implement the CQRS design architecture
 4. Migrations
 
 5. Services (for intergration propose)
-
-#### Hydra.Customers.Domain
-
-Represent the DDD architecture
-
-1. Models (Aggregrations, entities and value object).
-
-2. Interfaces (Repository)
