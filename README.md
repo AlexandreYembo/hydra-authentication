@@ -7,6 +7,15 @@ Workflow for Signup:
 
 ### Architecture
 
+### Hydra.Identity.API
+
+Implements the interface to perform actions available so far:
+- Register a new user
+
+- Allow to login an user and get the token
+
+- Allow to refresh a token by providing the token Guid.
+
 #### Hydra.Identity.Application
 
 Implement the CQRS design architecture
