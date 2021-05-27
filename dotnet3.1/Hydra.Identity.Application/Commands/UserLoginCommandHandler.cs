@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Hydra.Core.Mediator.Abstractions.Mediator;
 using Hydra.Core.Mediator.Messages;
 using Hydra.Identity.Application.Commands.UserLogin;
-using Hydra.Identity.Application.Events.UserLogin;
 using Hydra.Identity.Application.Exceptions;
 using Hydra.Identity.Application.Models;
 using Hydra.Identity.Application.Providers;
@@ -35,9 +34,8 @@ namespace Hydra.Identity.Application.Commands
             var userLogged = await _userLoginProvider.UserSignInAsync(message.Email, message.Password);
             if(!userLogged.Succeeded)
             {
-                var @event = new UserLoginFailedEvent(message.Email, userLogged);
-                await _mediatorHandler.PublishEvent(@event).ConfigureAwait(false);
-                return new CommandResult<UserLoginResponse>(@event.ValidationResult);
+                var result = new UserLoginResponse(userLogged);
+                return new CommandResult<UserLoginResponse>(result.GetValidationResult());
             }
 
             try
@@ -47,9 +45,8 @@ namespace Hydra.Identity.Application.Commands
             }
             catch (UserTokenException ute)
             {
-                var @event = new UserLoginFailedEvent(message.Email, ute.Message);
-                await _mediatorHandler.PublishEvent(@event).ConfigureAwait(false);
-                return new CommandResult<UserLoginResponse>(@event.ValidationResult);
+                var result = new UserLoginResponse(userLogged);
+                return new CommandResult<UserLoginResponse>(result.GetValidationResult());
             }
         }
     }

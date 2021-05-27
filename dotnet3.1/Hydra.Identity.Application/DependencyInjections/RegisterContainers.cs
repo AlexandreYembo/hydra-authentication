@@ -9,7 +9,6 @@ using Hydra.Identity.Application.Commands.UserLogin;
 using Hydra.Identity.Application.Commands.UserRegister;
 using Hydra.Identity.Application.Events;
 using Hydra.Identity.Application.Events.TokenRefresh;
-using Hydra.Identity.Application.Events.UserLogin;
 using Hydra.Identity.Application.Events.UserRegister;
 using Hydra.Identity.Application.Models;
 using MediatR;
@@ -43,8 +42,6 @@ namespace Hydra.Identity.Application.DependencyInjections
          private static IServiceCollection RegisterContainerUserLogin(this IServiceCollection services)
          {
             services.AddScoped<IRequestHandler<UserLoginCommand, CommandResult<UserLoginResponse>>, UserLoginCommandHandler>();
-
-            services.AddScoped<INotificationHandler<UserLoginFailedEvent>, UserLoginEventHandler>();
             return services;
          }
 
