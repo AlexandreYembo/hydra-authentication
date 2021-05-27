@@ -1,5 +1,5 @@
 # Hydra Authentication
-Api for customers.
+Api to Register and Authenticate the user in the platform.
 
 Workflow for Signup:
 
