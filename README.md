@@ -36,5 +36,3 @@ Contains commands and event and Business logic.
 3. Mappings
 
 4. Migrations
-
-5. Services (for intergration propose)
